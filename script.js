@@ -1,24 +1,50 @@
-let countdown = setInterval(function(){
-    const now = new Date()  //今の日時
-    const target = new Date(now.getFullYear(), now.getMonth() + 1, 0,'23','59','59') //ターゲット日時を取得
-    const remainTime = target - now  //差分を取る（ミリ秒で返ってくる
 
-    //指定の日時を過ぎていたら処理をしない
-    if(remainTime < 0) return false 
+function CountdownTimer(elm, tl, mes) {
+this.initialize.apply(this, arguments);
+}
+CountdownTimer.prototype = {
+initialize: function (elm, tl, mes) {
+this.elem = document.getElementById(elm);
+this.tl = tl;
+this.mes = mes;
+}, countDown: function () {
+var timer = '';
+var today = new Date();
+var day = Math.floor((this.tl - today) / (24 * 60 * 60 * 1000));
+var hour = Math.floor(((this.tl - today) % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+var min = Math.floor(((this.tl - today) % (24 * 60 * 60 * 1000)) / (60 * 1000)) % 60;
+var sec = Math.floor(((this.tl - today) % (24 * 60 * 60 * 1000)) / 1000) % 60 % 60;
+var milli = Math.floor(((this.tl - today) % (24 * 60 * 60 * 1000)) / 10) % 100;
+var me = this;
 
-    //差分の日・時・分・秒を取得
-    const difDay  = Math.floor(remainTime / 1000 / 60 / 60 / 24)
-    const difHour = Math.floor(remainTime / 1000 / 60 / 60 ) % 24
-    const difMin  = Math.floor(remainTime / 1000 / 60) % 60
-    const difSec  = Math.floor(remainTime / 1000) % 60
+if ((this.tl - today) > 0) {
+if (day)
+timer += '' + day + '日';
+if (hour)
+timer += '' + hour + '時間';
+timer += '' + this.addZero(min) + '分' +
+    this.addZero(sec) + '秒';
+this.elem.innerHTML = timer;
+tid = setTimeout(function () {
+me.countDown();
+}, 10);
+} else {
+this.elem.innerHTML = this.mes;
+return;
+}
+}, addZero: function (num) {
+return ('0' + num).slice(-2);
+}
+}
+function CDT() {
+var tl = new Date('2021/5/29 10:00:00');// ここで日付を指定
+var timer = new CountdownTimer('CDT', tl, '終了しました');
+timer.countDown();
+}
 
-    //残りの日時を上書き
-    document.getElementById("countdown-day").textContent  = difDay
-    document.getElementById("countdown-hour").textContent = difHour
-    document.getElementById("countdown-min").textContent  = difMin
-    document.getElementById("countdown-sec").textContent  = difSec
 
-    //指定の日時になればカウントを止める
-    if(remainTime < 0) clearInterval(countdown)
 
-}, 1000)    /
+window.onload = function () {
+CDT();
+CDT01();
+}
