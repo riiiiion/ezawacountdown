@@ -37,7 +37,7 @@ CountdownTimer.prototype = {
     }
 }
 function CDT() {
-    var tl = new Date('2022/8/27 10:00:00');// ここで日付を指定
+    var tl = new Date('2023/8/27 10:00:00');// ここで日付を指定
     var timer = new CountdownTimer('CDT', tl, '終了しました');
     timer.countDown();
 }
